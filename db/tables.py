@@ -1,5 +1,5 @@
 from sqlalchemy import (
-    Table, Column, INTEGER, String, Text, TIMESTAMP)
+    Table, Column, INTEGER, String, Text, TIMESTAMP, DateTime, func)
 
 from .basic import metadata
 
@@ -32,7 +32,6 @@ wbuser = Table("wbuser", metadata,
                Column("contact_info", String(300), default='', server_default=''),
                Column("education_info", String(300), default='', server_default=''),
                Column("head_img", String(500), default='', server_default=''),
-               Column("isFan", INTEGER, default=0, server_default='0'),
                )
 
 # seed ids for user crawling
@@ -85,6 +84,7 @@ weibo_comment = Table('weibo_comment', metadata,
                       Column("id", INTEGER, primary_key=True, autoincrement=True),
                       Column("comment_id", String(50), unique=True),
                       Column("comment_cont", Text),
+                      Column("comment_screen_name", Text),
                       Column("weibo_id", String(200)),
                       Column("user_id", String(20)),
                       Column("create_time", String(200)),
@@ -118,6 +118,9 @@ user_relation = Table("user_relation", metadata,
                       Column('user_id', String(20)),
                       Column('follow_or_fans_id', String(20)),
                       Column('type', INTEGER),  # 1 stands for fans, 2 stands for follows
+                      Column('from_where', String(60)),
+                      Column('crawl_time', DateTime(3))  # DATETIME(6) means save 6 digits milliseconds
+                                                         # time is stored in UTC
                       )
 
 # dialogue table
